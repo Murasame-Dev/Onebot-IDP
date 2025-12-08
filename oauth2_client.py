@@ -151,17 +151,12 @@ class OAuth2Client:
         if config.DEBUG:
             print(f"[DEBUG] 完整用户信息: {user_info}")
         
-        # 尝试从不同的字段获取用户名
-        # 不同的 SSO 服务器可能使用不同的字段名
-        username = (
-            user_info.get('preferred_username') or
-            user_info.get('username') or
-            user_info.get('name') or
-            user_info.get('sub')
-        )
+        # 从配置的字段获取用户名
+        username_field = config.OAUTH2_USERNAME_FIELD
+        username = user_info.get(username_field)
         
         if not username:
-            error_msg = f"无法从用户信息中提取用户名，用户信息: {user_info}"
+            error_msg = f"用户信息中没有 {username_field} 字段，用户信息: {user_info}"
             print(error_msg)
             return None, error_msg
         

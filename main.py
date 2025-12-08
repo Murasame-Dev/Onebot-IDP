@@ -46,6 +46,8 @@ OAUTH2_USERINFO_URL=https://sso.xxx.com/oauth2/userinfo
 OAUTH2_REDIRECT_URI=https://idp.xxx.com/callback
 # OAuth2 Scope
 OAUTH2_SCOPE=openid profile
+# 用户信息中用作用户名的字段（常见值：preferred_username, username, name, sub）
+OAUTH2_USERNAME_FIELD=preferred_username
 
 # ==================== 其他配置 ====================
 # 绑定数据存储文件

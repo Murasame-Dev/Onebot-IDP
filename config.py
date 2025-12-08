@@ -25,6 +25,7 @@ OAUTH2_TOKEN_URL = os.getenv("OAUTH2_TOKEN_URL", "https://sso.ineko.cc/applicati
 OAUTH2_USERINFO_URL = os.getenv("OAUTH2_USERINFO_URL", "https://sso.ineko.cc/application/o/userinfo/")
 OAUTH2_REDIRECT_URI = os.getenv("OAUTH2_REDIRECT_URI", f"{BASE_URL}/callback")
 OAUTH2_SCOPE = os.getenv("OAUTH2_SCOPE", "openid profile email")
+OAUTH2_USERNAME_FIELD = os.getenv("OAUTH2_USERNAME_FIELD", "preferred_username")  # 用户信息中用作用户名的字段
 
 # 数据存储路径
 DATA_FILE = os.getenv("DATA_FILE", "bindings.json")
