@@ -122,31 +122,31 @@ class OAuth2Client:
             print(error_msg)
             return None, error_msg
 
-    async def get_username_from_code(self, code: str) -> tuple[Optional[str], Optional[str]]:
+    async def get_username_from_code(self, code: str) -> tuple[Optional[str], Optional[str], Optional[Dict[str, Any]]]:
         """
-        从授权码获取用户名
+        从授权码获取用户名和用户信息
         
         Args:
             code: 授权码
             
         Returns:
-            (username, error_msg) - 成功返回 (str, None)，失败返回 (None, error_msg)
+            (username, error_msg, user_info) - 成功返回 (str, None, dict)，失败返回 (None, error_msg, None)
         """
         # 1. 换取 token
         token_data, error = await self.exchange_code_for_token(code)
         if not token_data:
-            return None, error or "获取token失败"
+            return None, error or "获取token失败", None
         
         access_token = token_data.get('access_token')
         if not access_token:
             error_msg = f"Token响应中没有access_token，响应内容: {token_data}"
             print(error_msg)
-            return None, error_msg
+            return None, error_msg, None
         
         # 2. 获取用户信息
         user_info, error = await self.get_user_info(access_token)
         if not user_info:
-            return None, error or "获取用户信息失败"
+            return None, error or "获取用户信息失败", None
         
         if config.DEBUG:
             print(f"[DEBUG] 完整用户信息: {user_info}")
@@ -158,9 +158,9 @@ class OAuth2Client:
         if not username:
             error_msg = f"用户信息中没有 {username_field} 字段，用户信息: {user_info}"
             print(error_msg)
-            return None, error_msg
+            return None, error_msg, None
         
-        return username, None
+        return username, None, user_info
 
 
 # 全局 OAuth2 客户端实例
