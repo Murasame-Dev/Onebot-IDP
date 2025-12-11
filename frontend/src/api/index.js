@@ -9,7 +9,7 @@ const api = axios.create({
 export const apiService = {
   // Get service status
   async getStatus() {
-    const response = await api.get('/')
+    const response = await api.get('/api/status')
     return response.data
   },
 

@@ -16,13 +16,6 @@ def get_real_ip(request: Request) -> str:
     return getattr(request.state, 'real_ip', request.client.host if request.client else "unknown")
 
 
-@router.get("/")
-async def root(request: Request):
-    """根路径 - 服务状态"""
-    real_ip = get_real_ip(request)
-    return {"service": "Onebot-IDP", "status": "running", "your_ip": real_ip}
-
-
 # 注册子路由
 router.include_router(bind_router)
 router.include_router(callback_router)

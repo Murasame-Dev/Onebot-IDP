@@ -2,11 +2,18 @@
 /api 端点
 绑定信息查询接口
 """
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 
 from core.storage import data_store
 
 router = APIRouter()
+
+
+@router.get("/status")
+async def get_status(request: Request):
+    """获取服务状态"""
+    real_ip = getattr(request.state, 'real_ip', request.client.host if request.client else "unknown")
+    return {"service": "Onebot-IDP", "status": "running", "your_ip": real_ip}
 
 
 @router.get("/bindings")
