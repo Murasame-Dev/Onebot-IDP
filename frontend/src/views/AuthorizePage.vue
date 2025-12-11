@@ -151,15 +151,19 @@ const refreshPage = () => {
 }
 
 const initializeAuth = async () => {
-  // Check if this is coming from OAuth authorize endpoint
-  // In real scenario, the backend would handle the authorize flow
-  // and this page would receive the login_code
+  // This Vue component is designed for a future full-SPA implementation
+  // Currently, the backend handles the OAuth authorize flow with its own HTML
+  // that includes countdown, verification code display, and status polling
+  // 
+  // This component redirects to the backend's authorize endpoint which:
+  // 1. Creates a login session with a verification code
+  // 2. Displays the code for user to send via QQ bot
+  // 3. Polls for authorization status
+  // 4. Redirects back to the third-party app
   
-  // For now, we'll redirect to the actual backend authorize endpoint
-  // which will show its own HTML page
   const params = route.query
   if (params.client_id) {
-    // Build the authorize URL and redirect
+    // Build the authorize URL and redirect to backend
     const authorizeUrl = apiService.buildAuthorizeUrl(params)
     window.location.href = authorizeUrl
   } else {

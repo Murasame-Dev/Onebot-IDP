@@ -7,19 +7,8 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
-      '/api': {
-        target: 'http://localhost:8000',
-        changeOrigin: true
-      },
-      '/oauth': {
-        target: 'http://localhost:8000',
-        changeOrigin: true
-      },
-      '/bind': {
-        target: 'http://localhost:8000',
-        changeOrigin: true
-      },
-      '/callback': {
+      // Proxy all API and backend endpoints to the FastAPI server
+      '^/(api|oauth|bind|callback)': {
         target: 'http://localhost:8000',
         changeOrigin: true
       }

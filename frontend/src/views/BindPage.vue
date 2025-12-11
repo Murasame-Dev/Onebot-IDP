@@ -56,8 +56,10 @@ const error = ref(null)
 
 const redirectToBind = async () => {
   try {
-    // The backend will handle the redirect to OAuth2 authorize
-    // We just need to navigate to the actual bind endpoint
+    // Redirect to the backend bind endpoint which will:
+    // 1. Validate the bind code
+    // 2. Redirect to OAuth2 authorization server
+    // This Vue component is just a loading/transition page
     const bindUrl = apiService.buildBindUrl(props.bindCode)
     window.location.href = bindUrl
   } catch (err) {
