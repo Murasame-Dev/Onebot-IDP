@@ -10,6 +10,7 @@
 - 🔗 **双向 WebSocket** - 支持 client（主动连接）和 server（等待连接）两种模式
 - 💾 **持久化存储** - JSON 文件存储绑定关系，支持自定义额外字段
 - 🌐 **FastAPI 后端** - 高性能异步 Web 服务
+- 🎨 **Vue 3 前端** - 现代化的 Web 管理界面（新增）
 - ⚙️ **高度可配置** - 命令名称、字段输出等均可自定义
 
 ## 📋 工作流程
@@ -51,6 +52,8 @@ cd Onebot-IDP
 
 ### 2. 安装依赖
 
+#### 后端依赖
+
 ```bash
 # 使用 pip
 pip install -r requirements.txt
@@ -58,6 +61,15 @@ pip install -r requirements.txt
 # 或使用 uv（推荐）
 uv sync
 ```
+
+#### 前端依赖（可选，仅开发时需要）
+
+```bash
+cd frontend
+npm install
+```
+
+> 💡 如果只需要运行服务，前端已预构建，无需安装前端依赖
 
 ### 3. 配置
 
@@ -193,6 +205,39 @@ CMD_LOGIN=login
 | `/oauth/userinfo` | GET | 用户信息端点 |
 | `/oauth/check_status` | GET/POST | 检查授权状态（供前端轮询） |
 
+## 🎨 Web 前端界面
+
+项目已集成 Vue 3 前端界面，提供以下功能：
+
+### 功能页面
+
+- **首页** (`/`) - 服务状态展示、功能介绍、命令列表
+- **绑定管理** (`/admin/bindings`) - 查看和管理所有 QQ 账号绑定
+- **绑定页面** (`/bind/:code`) - QQ 账号绑定流程
+- **授权页面** (`/oauth/authorize`) - OAuth2 登录验证
+
+### 前端开发
+
+如需修改前端代码：
+
+```bash
+# 进入前端目录
+cd frontend
+
+# 安装依赖
+npm install
+
+# 启动开发服务器（热重载）
+npm run dev
+
+# 构建生产版本
+npm run build
+```
+
+前端开发服务器会在 `http://localhost:5173` 启动，并自动代理 API 请求到后端。
+
+更多信息请查看 [frontend/README.md](frontend/README.md)
+
 ## 📁 项目结构
 
 ```
@@ -205,9 +250,20 @@ Onebot-IDP/
 │   ├── bot.py                 # 机器人消息处理器
 │   ├── oauth2_client.py       # OAuth2 客户端
 │   └── storage.py             # 数据存储
+├── apps/                      # 应用模块
+│   ├── base/                  # 基础功能（绑定、回调等）
+│   └── oauth2_server/         # OAuth2 IDP 功能
 ├── text/                      # 文本模块
 │   ├── text.py                # 消息文本配置
 │   └── config_example_generator.py  # 默认配置模板
+├── frontend/                  # Vue 前端（新增）
+│   ├── src/                   # 源代码
+│   │   ├── views/             # 页面组件
+│   │   ├── router/            # 路由配置
+│   │   ├── api/               # API 服务
+│   │   └── main.js            # 入口文件
+│   ├── dist/                  # 构建产物
+│   └── package.json           # 前端依赖
 ├── data/                      # 数据目录
 │   └── bindings.json          # 绑定数据存储
 ├── requirements.txt           # 依赖列表

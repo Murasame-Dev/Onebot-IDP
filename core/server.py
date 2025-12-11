@@ -2,7 +2,11 @@
 FastAPI 服务端
 主入口，注册所有路由
 """
+import os
+from pathlib import Path
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from starlette.middleware.cors import CORSMiddleware
 
 from apps.base import router as base_router
@@ -46,3 +50,32 @@ async def get_real_ip_middleware(request: Request, call_next):
 # 注册路由
 app.include_router(base_router)
 app.include_router(oauth2_router)
+
+# 静态文件服务 - Vue 前端
+# 获取前端构建目录
+frontend_dist = Path(__file__).parent.parent / "frontend" / "dist"
+
+# 如果前端构建目录存在，则挂载静态文件服务
+if frontend_dist.exists():
+    # 挂载静态资源（CSS, JS等）
+    app.mount("/assets", StaticFiles(directory=frontend_dist / "assets"), name="assets")
+    
+    # 处理前端路由 - 所有非API路由都返回 index.html（让 Vue Router 处理）
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str):
+        """
+        为 Vue SPA 提供服务
+        对于非 API 路径，返回 index.html
+        """
+        # 检查是否是静态文件请求
+        file_path = frontend_dist / full_path
+        if file_path.is_file():
+            return FileResponse(file_path)
+        
+        # 对于所有其他路径，返回 index.html（让 Vue Router 处理）
+        index_path = frontend_dist / "index.html"
+        if index_path.exists():
+            return FileResponse(index_path)
+        
+        # 如果 index.html 不存在，返回 404
+        return {"error": "Not found"}
