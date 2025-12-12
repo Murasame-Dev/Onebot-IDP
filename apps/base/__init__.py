@@ -5,7 +5,7 @@ from fastapi import APIRouter, Request
 
 from .bind import router as bind_router
 from .callback import router as callback_router
-from .api import router as api_router
+# from .api import router as api_router
 
 # 主路由
 router = APIRouter()
@@ -26,4 +26,4 @@ async def root(request: Request):
 # 注册子路由
 router.include_router(bind_router)
 router.include_router(callback_router)
-router.include_router(api_router, prefix="/api", tags=["API"])
+# router.include_router(api_router, prefix="/api", tags=["API"])
